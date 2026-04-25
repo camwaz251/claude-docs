@@ -1,0 +1,14 @@
+.env
+.env.local
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+node_modules/
+
+# Local-only Claude Code state
+.claude/settings.local.json
+.claude/projects/

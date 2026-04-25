@@ -1,0 +1,6 @@
+[submodule "vendor/claude-code-docs"]
+	path = vendor/claude-code-docs
+	url = https://github.com/ericbuess/claude-code-docs
+[submodule "vendor/claude-wiki"]
+	path = vendor/claude-wiki
+	url = https://github.com/johnzfitch/claude-wiki

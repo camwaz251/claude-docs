@@ -20,6 +20,16 @@ What you'll find here:
   (and a-Shell `lg2`) to a repo, including PAT scoping.
 - **`docs/using-vendor-submodules.md`** — how to read the bundled Anthropic
   docs without authenticated `WebFetch`.
+- **`docs/sandbox-security-analysis.md`** — from-the-inside security review
+  of the cloud sandbox: Firecracker microVM boundary, capability/seccomp
+  posture, TLS interception by Anthropic's egress proxy, threat model.
+  Useful as input for an adoption / risk review.
+- **`docs/sandbox-recon-runbook.md`** — reproducible checklist of the
+  exact probes that produced the security analysis. Hand to a future
+  Claude session (or a colleague) to rerun the recon end-to-end.
+- **`docs/sandbox-recon.sh`** — scripted version of the runbook. Emits
+  a diff-friendly report tagged stable / variable / per-session, so two
+  sessions can be `diff`ed to see what actually changes per VM.
 - **`vendor/`** — Anthropic's docs as **git submodules**:
   - `vendor/claude-code-docs` → `ericbuess/claude-code-docs` (Claude Code CLI)
   - `vendor/claude-wiki` → `johnzfitch/claude-wiki` (broader Anthropic ecosystem)

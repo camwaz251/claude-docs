@@ -30,6 +30,11 @@ What you'll find here:
 - **`docs/sandbox-recon.sh`** — scripted version of the runbook. Emits
   a diff-friendly report tagged stable / variable / per-session, so two
   sessions can be `diff`ed to see what actually changes per VM.
+- **`docs/sandbox-recon-baseline.txt`** — saved output of
+  `sandbox-recon.sh` (safe mode) from one session, kept as a known-good
+  reference. Run the script in a future session and
+  `diff -u docs/sandbox-recon-baseline.txt /tmp/new.txt` to see what
+  drifted.
 - **`vendor/`** — Anthropic's docs as **git submodules**:
   - `vendor/claude-code-docs` → `ericbuess/claude-code-docs` (Claude Code CLI)
   - `vendor/claude-wiki` → `johnzfitch/claude-wiki` (broader Anthropic ecosystem)

@@ -233,6 +233,36 @@ What this means in plain language:
   filesystem level. The only shared inputs are: env vars set on the
   environment, the network-access policy, and the base image tag.
 
+### Chat session ≠ VM session
+
+An important detail for anyone using the iOS or web app: **a single chat
+thread can outlive the VM that started it.** If you let a chat go idle
+for long enough the VM is reclaimed; the next message you send to the
+same chat spawns a *new* microVM, restores the conversation transcript
+into it, and resumes — you (the human) never see the seam.
+
+What this means in practice:
+
+- The agent's memory of *what was said* persists across VM rotations
+  (it's stored on Anthropic's side, not in the VM).
+- The VM's filesystem, processes, open ports, and any unpushed work
+  do *not* persist. The agent picks up in the new VM with an empty
+  `/tmp`, a re-cloned repo, and zero installed-via-`apt` state.
+- The SessionStart hook fires *again* on resume — that's how the
+  vendored submodules and any custom bootstrap come back up.
+- Two consecutive runs of `sandbox-recon.sh` inside one chat thread
+  can land on different physical hosts. Observed empirically: same
+  kernel/OS/policy/CA, but different CPU SKU and different microcode
+  mitigation strings. See
+  [`sandbox-recon-baseline.txt`](sandbox-recon-baseline.txt) vs
+  [`sandbox-recon-rerun.txt`](sandbox-recon-rerun.txt) — 8/200 lines
+  drift, all in `:V`/`:P` blocks, zero `:S` drift.
+
+Security implication: anything an attacker tries to *land* in the VM
+(reverse shell, cron, modified `.bashrc`) dies on the next VM rotation.
+Anything the attacker has already pushed to the repo, sent over the
+network, or returned to the chat transcript persists.
+
 ## Threat model
 
 ### What an attacker inside one session *cannot* do

@@ -35,6 +35,11 @@ What you'll find here:
   reference. Run the script in a future session and
   `diff -u docs/sandbox-recon-baseline.txt /tmp/new.txt` to see what
   drifted.
+- **`docs/sandbox-recon-rerun.txt`** — second snapshot, captured after a
+  VM rotation inside the same iOS chat thread. Diff against the baseline
+  to see exactly what changes when the platform reschedules you onto a
+  fresh host (spoiler: only `:V`/`:P` blocks — CPU SKU, microcode
+  mitigation strings, broker port, uptime).
 - **`vendor/`** — Anthropic's docs as **git submodules**:
   - `vendor/claude-code-docs` → `ericbuess/claude-code-docs` (Claude Code CLI)
   - `vendor/claude-wiki` → `johnzfitch/claude-wiki` (broader Anthropic ecosystem)

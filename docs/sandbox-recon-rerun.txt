@@ -1,0 +1,200 @@
+# sandbox-recon @ 2026-05-19T19:51:34Z
+# unsafe_mode=0  phases=host,boot,isolation,mounts,limits,net_basics,net_ports,net_https,net_tls,net_inbound,net_metadata,identity,toolchain,cpu_mit,egress_ip
+
+[host:S]
+kernel                       = Linux 6.18.5 x86_64
+os                           = Ubuntu 24.04.4 LTS
+arch                         = x86_64
+hostname                     = vm
+
+[host:V]
+cpu_count                    = 4
+cpu_model                    = Intel(R) Xeon(R) Processor @ 2.10GHz
+mem_total                    = 15Gi
+swap_total                   = 0B
+disk_total                   = 252G
+disk_free                    = 30G
+uptime_sec                   = 45
+
+[boot:S]
+pid1_comm                    = process_api
+pid1_cmdline                 = /process_api --firecracker-init --addr 0.0.0.0:2024 --max-ws-buffer-size 32768 --block-local-connections 
+kernel_cmdline               = console=ttyS0 reboot=k panic=1 nomodule random.trust_cpu=1 ipv6.disable=1 swiotlb=noforce rdinit=/process_api init_on_free=1 -- --firecracker-init --addr 0.0.0.0:2024 --max-ws-buffer-size 32768 --block-local-connections
+hypervisor                   = KVM
+detect_virt                  = docker
+dockerenv                    = absent
+containerenv                 = absent
+modules_loaded               = 0
+
+[isolation:S]
+whoami                       = root:0
+groups                       = root
+seccomp                      = 0
+seccomp_flt                  = 0
+no_new_privs                 = 0
+cap_eff                      = 000001fffeffffff
+cap_bnd                      = 000001fffeffffff
+apparmor                     = kernel
+selinux                      = disabled
+apparmor_loaded              = no
+
+[mounts:S]
+# fstype / mount / options (root-level and harness mounts only)
+/dev/vda / rw,relatime
+/dev/vdb /opt/claude-code ro,relatime
+/dev/vdc /opt/env-runner ro,relatime
+docker_sock                  = absent
+opt_listing                  = apache-maven-3.9.11 claude-code env-runner gradle gradle-8.14.3 maven node20 node21 node22 nvm pw-browsers rbenv ruby-3.1.6 ruby-3.2.6 ruby-3.3.6 
+
+[limits:V]
+cgroup_fstype                = tmpfs
+memory_max                   = n/a
+cpu_max                      = n/a
+pids_max                     = n/a
+ulimit_nofile                = 4096
+ulimit_nproc                 = 64290
+ulimit_core                  = 0
+ulimit_stack                 = 12500
+
+[net_basics:S]
+resolv_conf                  = nameserver 8.8.8.8
+hosts_file                   = 127.0.0.1 localhost 127.0.0.1 vm
+default_route                = 
+ipv4_iface                   = 
+ipv6_iface                   = 
+ping_present                 = no
+
+[net_ports:S]
+tcp_egress_22                = blocked
+tcp_egress_25                = blocked
+tcp_egress_53                = blocked
+tcp_egress_80                = open
+tcp_egress_443               = open
+tcp_egress_587               = blocked
+tcp_egress_993               = blocked
+tcp_egress_3306              = blocked
+tcp_egress_5432              = blocked
+tcp_egress_6379              = blocked
+tcp_egress_8080              = blocked
+tcp_egress_8443              = blocked
+tcp_53_to_8888               = blocked
+
+[net_https:V]
+https_github.com             = 200
+https_api.anthropic.com      = 404
+https_pypi.org               = 200
+https_registry.npmjs.org     = 200
+https_example.com            = 200
+https_cloudflare.com         = 301
+
+[net_tls:S]
+tls_issuer_github.com        = O = Anthropic, CN = sandbox-egress-production TLS Inspection CA
+tls_issuer_example.com       = O = Anthropic, CN = sandbox-egress-production TLS Inspection CA
+tls_issuer_pypi.org          = O = Anthropic, CN = sandbox-egress-production TLS Inspection CA
+chain_len_github             = 2
+ca_bundle_path               = /etc/ssl/certs/ca-certificates.crt
+requests_ca                  = /etc/ssl/certs/ca-certificates.crt
+ssl_cert_file                = /etc/ssl/certs/ca-certificates.crt
+
+[net_inbound:S]
+bind_0.0.0.0_80              = ok
+bind_0.0.0.0_8080            = ok
+ss_listening                 = 0
+
+[net_metadata:S]
+gce_metadata                 = 403
+aws_imds                     = 403
+
+[identity:P]
+# names of CLAUDE_/IS_SANDBOX/ANT_ env vars (values redacted unless --unsafe)
+ANTHROPIC_BASE_URL                                 = <redacted>
+ANT_IMAGE_REPOSITORY                               = <redacted>
+ANT_IMAGE_TAG                                      = <redacted>
+CLAUDECODE                                         = <redacted>
+CLAUDE_AFTER_LAST_COMPACT                          = <redacted>
+CLAUDE_AUTO_BACKGROUND_TASKS                       = <redacted>
+CLAUDE_CODE_ACCOUNT_UUID                           = <redacted>
+CLAUDE_CODE_BASE_REF                               = <redacted>
+CLAUDE_CODE_CONTAINER_ID                           = <redacted>
+CLAUDE_CODE_DEBUG                                  = <redacted>
+CLAUDE_CODE_DIAGNOSTICS_FILE                       = <redacted>
+CLAUDE_CODE_ENTRYPOINT                             = <redacted>
+CLAUDE_CODE_ENVIRONMENT_RUNNER_VERSION             = <redacted>
+CLAUDE_CODE_EXECPATH                               = <redacted>
+CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR            = <redacted>
+CLAUDE_CODE_ORGANIZATION_UUID                      = <redacted>
+CLAUDE_CODE_POST_FOR_SESSION_INGRESS_V2            = <redacted>
+CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST               = <redacted>
+CLAUDE_CODE_PROXY_RESOLVES_HOSTS                   = <redacted>
+CLAUDE_CODE_REMOTE                                 = <redacted>
+CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE                = <redacted>
+CLAUDE_CODE_REMOTE_SEND_KEEPALIVES                 = <redacted>
+CLAUDE_CODE_REMOTE_SESSION_ID                      = <redacted>
+CLAUDE_CODE_SESSION_ID                             = <redacted>
+CLAUDE_CODE_USE_CCR_V2                             = <redacted>
+CLAUDE_CODE_VERSION                                = <redacted>
+CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR         = <redacted>
+CLAUDE_CODE_WORKER_EPOCH                           = <redacted>
+CLAUDE_EFFORT                                      = <redacted>
+CLAUDE_ENABLE_STREAM_WATCHDOG                      = <redacted>
+CLAUDE_SESSION_INGRESS_TOKEN_FILE                  = <redacted>
+IS_SANDBOX                                         = <redacted>
+git_remote_origin            = http://<creds>@127.0.0.1:46495/git/<owner>/<repo>
+
+[toolchain:S]
+have_python3                 = /usr/local/bin/python3
+have_node                    = /opt/node22/bin/node
+have_npm                     = /opt/node22/bin/npm
+have_bun                     = /root/.bun/bin/bun
+have_go                      = /usr/local/go/bin/go
+have_rustc                   = /root/.cargo/bin/rustc
+have_cargo                   = /root/.cargo/bin/cargo
+have_gcc                     = /usr/bin/gcc
+have_make                    = /usr/bin/make
+have_curl                    = /usr/bin/curl
+have_wget                    = /usr/bin/wget
+have_jq                      = /usr/bin/jq
+have_git                     = /usr/bin/git
+have_docker                  = /usr/bin/docker
+have_kubectl                 = <missing>
+have_ssh                     = <missing>
+have_nc                      = /usr/bin/nc
+have_openssl                 = /usr/bin/openssl
+have_ip                      = <missing>
+have_ss                      = <missing>
+have_tcpdump                 = <missing>
+have_nmap                    = <missing>
+ver_python                   = Python 3.11.15
+ver_node                     = v22.22.2
+ver_go                       = go version go1.24.7 linux/amd64
+ver_gcc                      = gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+ver_git                      = git version 2.43.0
+suid_count                   = 9
+
+[cpu_mit:V]
+gather_data_sampling         = Not affected
+ghostwrite                   = Not affected
+indirect_target_selection    = Not affected
+itlb_multihit                = Not affected
+l1tf                         = Not affected
+mds                          = Not affected
+meltdown                     = Not affected
+mmio_stale_data              = Not affected
+old_microcode                = Not affected
+reg_file_data_sampling       = Not affected
+retbleed                     = Not affected
+spec_rstack_overflow         = Not affected
+spec_store_bypass            = Mitigation: Speculative Store Bypass disabled via prctl
+spectre_v1                   = Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+spectre_v2                   = Mitigation: Enhanced / Automatic IBRS; IBPB: conditional; PBRSB-eIBRS: SW sequence; BHI: Vulnerable
+srbds                        = Not affected
+tsa                          = Not affected
+tsx_async_abort              = Not affected
+vmscape                      = Not affected
+cpu_flag_hypervisor          = present
+entropy_avail                = 256
+
+[egress_ip:P]
+egress_prefix                = 35.238.0.0/16
+
+# end recon
